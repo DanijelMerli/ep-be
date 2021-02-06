@@ -10,7 +10,8 @@ namespace EsportsProphetAPI.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<Team> Teams { get; set; }
-        public DbSet<Logo> Logos { get; set; }
+        public DbSet<TeamLogo> TeamLogos { get; set; }
+        public DbSet<TournamentLogo> TournamentLogos { get; set; }
         public DbSet<Player> Players { get; set; }
     }
 }

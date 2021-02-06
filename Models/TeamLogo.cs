@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace EsportsProphetAPI.Models
 {
-    public class Logo : Photo
+    public class TeamLogo : Photo
     {
         public Team Team { get; set; }
-        public string Description { get; set; }
     }
 }

@@ -13,8 +13,10 @@ namespace EsportsProphetAPI.Models
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public ICollection<Team> Teams { get; set; }
+        public virtual ICollection<Team> Teams { get; set; }
         public double PrizePoolUSD { get; set; }
+        public int LogoId { get; private set; }
+        public TournamentLogo Logo { get; set; }
 
         public Tournament()
         {

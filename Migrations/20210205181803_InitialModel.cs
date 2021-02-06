@@ -3,22 +3,55 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EsportsProphetAPI.Migrations
 {
-    public partial class AddedTournaments : Migration
+    public partial class InitialModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Logos",
+                name: "TeamLogos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
                     Url = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Logos", x => x.Id);
+                    table.PrimaryKey("PK_TeamLogos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TournamentLogos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Url = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TournamentLogos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teams",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Tag = table.Column<string>(type: "TEXT", nullable: true),
+                    LogoId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teams", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Teams_TeamLogos_LogoId",
+                        column: x => x.LogoId,
+                        principalTable: "TeamLogos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,29 +64,16 @@ namespace EsportsProphetAPI.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    PrizePoolUSD = table.Column<double>(type: "REAL", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tournaments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Teams",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    PrizePoolUSD = table.Column<double>(type: "REAL", nullable: false),
                     LogoId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Teams", x => x.Id);
+                    table.PrimaryKey("PK_Tournaments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Teams_Logos_LogoId",
+                        name: "FK_Tournaments_TournamentLogos_LogoId",
                         column: x => x.LogoId,
-                        principalTable: "Logos",
+                        principalTable: "TournamentLogos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -116,6 +136,12 @@ namespace EsportsProphetAPI.Migrations
                 name: "IX_TeamTournament_TournamentsId",
                 table: "TeamTournament",
                 column: "TournamentsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tournaments_LogoId",
+                table: "Tournaments",
+                column: "LogoId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -133,7 +159,10 @@ namespace EsportsProphetAPI.Migrations
                 name: "Tournaments");
 
             migrationBuilder.DropTable(
-                name: "Logos");
+                name: "TeamLogos");
+
+            migrationBuilder.DropTable(
+                name: "TournamentLogos");
         }
     }
 }

@@ -16,23 +16,6 @@ namespace EsportsProphetAPI.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.2");
 
-            modelBuilder.Entity("EsportsProphetAPI.Models.Logo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Logos");
-                });
-
             modelBuilder.Entity("EsportsProphetAPI.Models.Player", b =>
                 {
                     b.Property<int>("Id")
@@ -61,12 +44,29 @@ namespace EsportsProphetAPI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Tag")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LogoId")
                         .IsUnique();
 
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("EsportsProphetAPI.Models.TeamLogo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TeamLogos");
                 });
 
             modelBuilder.Entity("EsportsProphetAPI.Models.Tournament", b =>
@@ -81,6 +81,9 @@ namespace EsportsProphetAPI.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("LogoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<double>("PrizePoolUSD")
                         .HasColumnType("REAL");
 
@@ -92,7 +95,24 @@ namespace EsportsProphetAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LogoId")
+                        .IsUnique();
+
                     b.ToTable("Tournaments");
+                });
+
+            modelBuilder.Entity("EsportsProphetAPI.Models.TournamentLogo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TournamentLogos");
                 });
 
             modelBuilder.Entity("EsportsProphetAPI.Models.User", b =>
@@ -141,9 +161,20 @@ namespace EsportsProphetAPI.Migrations
 
             modelBuilder.Entity("EsportsProphetAPI.Models.Team", b =>
                 {
-                    b.HasOne("EsportsProphetAPI.Models.Logo", "Logo")
+                    b.HasOne("EsportsProphetAPI.Models.TeamLogo", "Logo")
                         .WithOne("Team")
                         .HasForeignKey("EsportsProphetAPI.Models.Team", "LogoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Logo");
+                });
+
+            modelBuilder.Entity("EsportsProphetAPI.Models.Tournament", b =>
+                {
+                    b.HasOne("EsportsProphetAPI.Models.TournamentLogo", "Logo")
+                        .WithOne("Tournament")
+                        .HasForeignKey("EsportsProphetAPI.Models.Tournament", "LogoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -165,9 +196,14 @@ namespace EsportsProphetAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EsportsProphetAPI.Models.Logo", b =>
+            modelBuilder.Entity("EsportsProphetAPI.Models.TeamLogo", b =>
                 {
                     b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("EsportsProphetAPI.Models.TournamentLogo", b =>
+                {
+                    b.Navigation("Tournament");
                 });
 #pragma warning restore 612, 618
         }

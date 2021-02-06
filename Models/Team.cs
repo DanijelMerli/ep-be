@@ -7,9 +7,10 @@ namespace EsportsProphetAPI.Models
     {
         public int Id { get; private set; }
         public string Name { get; set; }
+        public string Tag { get; set; }
         public int LogoId { get; private set; }
-        public Logo Logo { get; set; }
-        public ICollection<Tournament> Tournaments { get; set; }
+        public TeamLogo Logo { get; set; }
+        public virtual ICollection<Tournament> Tournaments { get; set; }
 
         public Team()
         {
